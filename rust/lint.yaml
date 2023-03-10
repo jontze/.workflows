@@ -1,0 +1,30 @@
+---
+name: Rust Lint
+on:
+  workflow_call:
+    inputs:
+      toolchain:
+        description: Rust toolchain to use
+        default: stable
+        required: true
+        type: string
+
+env:
+  RUST_BACKTRACE: full
+  RUSTUP_MAX_RETRIES: 100
+  CARGO_INCREMENTAL: 0
+  CARGO_NET_RETRY: 100
+  CARGO_TERM_COLOR: always
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ inputs.toolchain }}
+          components: rustfmt
+      - name: Run format
+        run: cargo fmt --check -v
