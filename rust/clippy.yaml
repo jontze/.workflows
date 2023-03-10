@@ -8,6 +8,11 @@ on:
         default: stables
         required: true
         type: string
+      working-directory:
+        description: Working directory
+        default: .
+        required: false
+        type: string
 
 env:
   RUST_BACKTRACE: full
@@ -31,4 +36,5 @@ jobs:
           toolchain: ${{ inputs.toolchain }}
           components: clippy
       - name: Run clippy
+        working-directory: ${{ inputs.working-directory }}
         run: cargo clippy

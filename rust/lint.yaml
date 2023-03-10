@@ -6,7 +6,12 @@ on:
       toolchain:
         description: Rust toolchain to use
         default: stable
-        required: true
+        required: false
+        type: string
+      working-directory:
+        description: Working directory
+        default: .
+        required: false
         type: string
 
 env:
@@ -27,4 +32,5 @@ jobs:
           toolchain: ${{ inputs.toolchain }}
           components: rustfmt
       - name: Run format
+        working-directory: ${{ inputs.working-directory }}
         run: cargo fmt --check -v
