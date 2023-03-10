@@ -1,0 +1,44 @@
+---
+name: Rust Test
+on:
+  workflow_call:
+    inputs:
+      build:
+        default: false
+        type: boolean
+        required: false
+        description: Test with build
+      working-directory:
+        description: Working directory
+        default: .
+        required: false
+        type: string
+      toolchain:
+        description: Rust toolchain to use
+        default: stable
+        required: false
+        type: string
+
+jobs:
+  lint:
+    name: Lint
+    uses: jontze/.workflows/.github/workflows/rust_lint.yaml@main
+    with:
+      toolchain: stable
+      working-directory: ${{ inputs.working-directory }}
+
+  build:
+    name: Build
+    if: inputs.build
+    uses: jontze/.workflows/.github/workflows/rust_build.yaml@main
+    with:
+      toolchain: stable
+      working-directory: ${{ inputs.working-directory }}
+      is-release: true
+
+  clippy:
+    name: Clippy
+    uses: jontze/.workflows/.github/workflows/rust_clippy.yaml@main
+    with:
+      toolchain: stable
+      working-directory: ${{ inputs.working-directory }}
