@@ -23,12 +23,14 @@ env:
 
 jobs:
   clippy:
+    name: Clippy
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Setup Cache for Rust
         uses: Swatinem/rust-cache@v2
         with:
+          workspaces: ${{ inputs.working-directory }}
           prefix-key: "clippy-${{ github.job }}"
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@master
