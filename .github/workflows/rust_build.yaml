@@ -1,0 +1,51 @@
+---
+name: Rust Build
+on:
+  workflow_call:
+    inputs:
+      toolchain:
+        description: Rust toolchain to use
+        default: stable
+        required: false
+        type: string
+      working-directory:
+        description: Working directory
+        default: .
+        required: false
+        type: string
+      is-release:
+        description: Is this a release build?
+        default: false
+        required: false
+        type: boolean
+
+env:
+  RUST_BACKTRACE: full
+  RUSTUP_MAX_RETRIES: 100
+  CARGO_INCREMENTAL: 0
+  CARGO_NET_RETRY: 100
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build_test:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Cache for Rust
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: ${{ inputs.working-directory }}
+          prefix-key: "clippy-${{ github.job }}"
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ inputs.toolchain }}
+      - name: Build
+        if: inputs.is-release == false
+        working-directory: inputs.working-directory
+        run: cargo build
+      - name: Build
+        if: inputs.is-release == true
+        working-directory: inputs.working-directory
+        run: cargo build
