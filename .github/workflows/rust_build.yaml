@@ -43,9 +43,9 @@ jobs:
           toolchain: ${{ inputs.toolchain }}
       - name: Build
         if: inputs.is-release == false
-        working-directory: inputs.working-directory
+        working-directory: ${{ inputs.working-directory }}
         run: cargo build
       - name: Build
         if: inputs.is-release == true
-        working-directory: inputs.working-directory
+        working-directory: ${{ inputs.working-directory }}
         run: cargo build
