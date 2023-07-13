@@ -8,6 +8,11 @@ on:
         type: boolean
         required: false
         description: Test with build
+      unit-tests:
+        default: false
+        type: boolean
+        required: false
+        description: Run with unit tests
       working-directory:
         description: Working directory
         default: .
@@ -24,7 +29,14 @@ jobs:
     name: Lint
     uses: jontze/.workflows/.github/workflows/rust_lint.yaml@main
     with:
-      toolchain: stable
+      toolchain: ${{ inputs.toolchain }}
+      working-directory: ${{ inputs.working-directory }}
+
+  clippy:
+    name: Clippy
+    uses: jontze/.workflows/.github/workflows/rust_clippy.yaml@main
+    with:
+      toolchain: ${{ inputs.toolchain }}
       working-directory: ${{ inputs.working-directory }}
 
   build:
@@ -32,13 +44,14 @@ jobs:
     if: inputs.build
     uses: jontze/.workflows/.github/workflows/rust_build.yaml@main
     with:
-      toolchain: stable
+      toolchain: ${{ inputs.toolchain }}
       working-directory: ${{ inputs.working-directory }}
-      is-release: true
+      is-release: false
 
-  clippy:
-    name: Clippy
-    uses: jontze/.workflows/.github/workflows/rust_clippy.yaml@main
+  unit-test:
+    name: Unit Test
+    if: inputs.unit-tests
+    uses: jontze/.workflows/.github/workflows/rust_unit_test.yaml@main
     with:
-      toolchain: stable
+      toolchain: ${{ inputs.toolchain }}
       working-directory: ${{ inputs.working-directory }}
