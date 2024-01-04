@@ -21,7 +21,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:          
-          fetch-depth: 0          
+          fetch-depth: 0
+      - name: Fetch tags
+        run: git fetch --tags          
       - name: Setup Conventional Versioning
         uses: jontze/.workflows/setup-conventional-versioning@main
         with:
