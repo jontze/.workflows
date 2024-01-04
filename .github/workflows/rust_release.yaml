@@ -38,9 +38,6 @@ jobs:
         id: next
         run: |
           echo "version=$(conventional-versioning -o plain)" >> $GITHUB_OUTPUT
-      - name: Debug - Print version
-        run: |
-          echo "${{ steps.next.outputs.version }}"
       - name: Set Cargo version
         run: |
           cargo set-version ${{ steps.next.outputs.version }}
