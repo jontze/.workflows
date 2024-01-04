@@ -29,7 +29,7 @@ jobs:
           tool: cargo-binstall
       - name: Install Cargo-Edit
         run: |
-          cargo binstall cargo-edit
+          cargo binstall cargo-edit --no-confirm
       - name: Specify next version
         id: next
         run: |
