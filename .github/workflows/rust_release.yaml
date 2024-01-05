@@ -2,6 +2,19 @@
 name: Rust Next Version
 on: 
   workflow_call:
+    inputs:
+      use-deploy-key:
+        default: false
+        required: false
+        type: boolean
+        description: |
+          Use the deploy key to checkout the repository. 
+          This is useful when you have other workflows that listen to tag push events.
+          GitHub doesn't trigger this event if the Git Action was created via regular GITHUB_TOKEN.
+    secrets:
+      DEPLOY_KEY:
+        description: 'The private key to use for checking out the repository'
+        required: false
 
 env:
     RUST_BACKTRACE: full
@@ -18,9 +31,16 @@ jobs:
     permissions:
         contents: write
     steps:
-      - name: Checkout
+      - name: Checkout (with deploy key)
+        if: github.event.inputs.use-deploy-key == 'true'
         uses: actions/checkout@v4
-        with:          
+        with:
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
+          fetch-depth: 0
+      - name: Checkout (with GITHUB_TOKEN)
+        if: github.event.inputs.use-deploy-key != 'true'
+        uses: actions/checkout@v4
+        with:
           fetch-depth: 0
       - name: Fetch tags
         run: git fetch --tags          
