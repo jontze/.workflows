@@ -68,7 +68,7 @@ jobs:
       - name: Create Tag
         if: steps.commit.outputs.changes_detected == 'true'
         run: |
-          git tag v${{ steps.next.outputs.version }}
+          git tag -a v${{ steps.next.outputs.version }} -m 'v${{ steps.next.outputs.version }}'
           git push origin v${{ steps.next.outputs.version }}
 
         
