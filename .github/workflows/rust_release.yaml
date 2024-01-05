@@ -32,13 +32,13 @@ jobs:
         contents: write
     steps:
       - name: Checkout (with deploy key)
-        if: github.event.inputs.use-deploy-key == 'true'
+        if: inputs.use-deploy-key
         uses: actions/checkout@v4
         with:
           ssh-key: ${{ secrets.DEPLOY_KEY }}
           fetch-depth: 0
       - name: Checkout (with GITHUB_TOKEN)
-        if: github.event.inputs.use-deploy-key != 'true'
+        if: !inputs.use-deploy-key
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
