@@ -64,7 +64,7 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v5
         id: commit
         with:
-          commit_message: "chore(version): Bump version to ${{ steps.next.outputs.version }} [skip ci]"
+          commit_message: "chore(version): Bump version to ${{ steps.next.outputs.version }}"
       - name: Create Tag
         if: steps.commit.outputs.changes_detected == 'true'
         run: |
