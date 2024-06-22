@@ -1,6 +1,6 @@
 ---
 name: Rust Next Version
-on: 
+on:
   workflow_call:
     inputs:
       use-deploy-key:
@@ -13,23 +13,23 @@ on:
           GitHub doesn't trigger this event if the Git Action was created via regular GITHUB_TOKEN.
     secrets:
       DEPLOY_KEY:
-        description: 'The private key to use for checking out the repository'
+        description: "The private key to use for checking out the repository"
         required: false
 
 env:
-    RUST_BACKTRACE: full
-    RUSTUP_MAX_RETRIES: 100
-    CARGO_REGISTRIES_CRATES_IO_PROTOCOL: sparse
-    CARGO_INCREMENTAL: 0
-    CARGO_NET_RETRY: 100
-    CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: full
+  RUSTUP_MAX_RETRIES: 100
+  CARGO_REGISTRIES_CRATES_IO_PROTOCOL: sparse
+  CARGO_INCREMENTAL: 0
+  CARGO_NET_RETRY: 100
+  CARGO_TERM_COLOR: always
 
 jobs:
   next:
     name: Next Version
     runs-on: ubuntu-latest
     permissions:
-        contents: write
+      contents: write
     steps:
       - name: Checkout (with deploy key)
         if: inputs.use-deploy-key == true
@@ -43,11 +43,9 @@ jobs:
         with:
           fetch-depth: 0
       - name: Fetch tags
-        run: git fetch --tags          
+        run: git fetch --tags
       - name: Setup Conventional Versioning
         uses: jontze/.workflows/setup-conventional-versioning@main
-        with:
-          version: v0.1.0
       - uses: taiki-e/install-action@v2
         with:
           tool: cargo-binstall
@@ -70,6 +68,3 @@ jobs:
         run: |
           git tag v${{ steps.next.outputs.version }}
           git push origin v${{ steps.next.outputs.version }}
-
-        
-
