@@ -5,13 +5,14 @@ description: "Setup Conventional Versioning Binary"
 inputs:
   version:
     description: "Version of Conventional Versioning to use"
-    required: true
+    required: false
+    default: "latest"
 
 runs:
   using: "composite"
   steps:
     - name: Install Conventional Versioning Binary
-      uses: jaxxstorm/action-install-gh-release@v1.10.0
+      uses: jaxxstorm/action-install-gh-release@v1
       with:
         repo: jontze/conventional-versioning
         tag: ${{ inputs.version }}
