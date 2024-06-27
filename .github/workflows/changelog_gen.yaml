@@ -1,0 +1,46 @@
+name: Changelog Generator
+on:
+  workflow_call:
+    inputs:
+      changelog_file:
+        description: "The file to write the changelog to"
+        required: true
+        default: "CHANGELOG.md"
+        type: string
+      cliff_config:
+        description: "The configuration file for git-cliff"
+        required: true
+        default: "cliff.toml"
+        type: string
+    secrets:
+      GITHUB_TOKEN:
+        description: "The GitHub token provided by the runner"
+        required: true
+
+jobs:
+  changelog:
+    name: Changelog Generator
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Generate a changelog
+        id: git-cliff
+        uses: orhun/git-cliff-action@v3
+        with:
+          config: ${{ inputs.cliff_config}}
+          args: --verbose
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPO: ${{ github.repository }}
+          OUTPUT: ${{ inputs.changelog_file }}
+      - name: Show the Changelog
+        run: cat "${{ steps.git-cliff.outputs.changelog }}"
+      - name: Commit the Changelog
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: "${{ steps.git-cliff.outputs.changelog }}"
