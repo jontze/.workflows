@@ -6,9 +6,10 @@ on:
 
 jobs:
   update_changelog:
+    permissions:
+      contents: write
     uses: "./.github/workflows/changelog_gen.yaml"
     with:
       changelog_file: "CHANGELOG.md"
       cliff_config: "cliff.toml"
-    secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    secrets: inherit
