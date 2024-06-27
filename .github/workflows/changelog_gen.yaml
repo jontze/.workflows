@@ -39,6 +39,5 @@ jobs:
       - name: Commit the Changelog
         uses: EndBug/add-and-commit@v9
         with:
-          pull: true
           add: "${{ steps.git-cliff.outputs.changelog }}"
           message: "chore: Update changelog [skip ci]"
