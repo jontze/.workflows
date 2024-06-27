@@ -12,10 +12,6 @@ on:
         required: true
         default: "cliff.toml"
         type: string
-    secrets:
-      GITHUB_TOKEN:
-        description: "The GitHub token provided by the runner"
-        required: true
 
 jobs:
   changelog:
