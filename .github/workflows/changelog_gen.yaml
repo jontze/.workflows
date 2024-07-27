@@ -12,6 +12,10 @@ on:
         required: true
         default: "cliff.toml"
         type: string
+      ref:
+        description: "The branch to generate the changelog for"
+        required: false
+        type: string
 
 jobs:
   changelog:
@@ -23,6 +27,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          fetch-depth: 0
+      - name: Checkout ${{ inputs.ref }}
+        if: ${{ inputs.ref != null }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
           fetch-depth: 0
       - name: Generate a changelog
         id: git-cliff
