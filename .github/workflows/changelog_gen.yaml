@@ -4,12 +4,12 @@ on:
     inputs:
       changelog_file:
         description: "The file to write the changelog to"
-        required: true
+        required: false
         default: "CHANGELOG.md"
         type: string
       cliff_config:
         description: "The configuration file for git-cliff"
-        required: true
+        required: false
         default: "cliff.toml"
         type: string
       ref:
