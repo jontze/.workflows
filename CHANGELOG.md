@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - *(changelog)* Add workflow to generate changelog file
 - *(changelog_gen)* Allow to specify branch for changelog_gen
 - *(workflow)* Create generic single-platform image built
+- *(workflows)* Build generic rust executables for multiple platforms
 
 ### 🐛 Bug Fixes
 
@@ -42,12 +43,17 @@ All notable changes to this project will be documented in this file.
 - *(changelog)* Remove pull before creating and pushing commit
 - *(changelog)* Make inputs with defaults optional
 
+### 🚜 Refactor
+
+- *(workflows/binaries)* Rename job to build rust binaries
+
 ### ⚙️ Miscellaneous Tasks
 
 - *(github)* Add dependabot config
 - *(rust_release)* Remove explicit tag fetching and just use depth
 - *(rust_release)* Remove debug echo step
 - Init git-cliff for changelog generation
+- Update changelog [skip ci]
 - Update changelog [skip ci]
 - Update changelog [skip ci]
 - Update changelog [skip ci]
