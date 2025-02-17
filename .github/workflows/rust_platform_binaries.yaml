@@ -1,0 +1,95 @@
+name: Build Rust Platform Binaries
+on:
+  workflow_call:
+    inputs:
+      name:
+        required: true
+        type: string
+        description: "The name of the crate (in the workspace)"
+      version:
+        required: false
+        type: string
+        description: "The version of the crate. If not provided, the version is extracted from the tag"
+
+jobs:
+  build-cli:
+    name: Build CLI Binary for ${{ matrix.target }}
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          # 64-bit Linux
+          - x86_64-unknown-linux-gnu
+          # 64-bit Linux Static
+          - x86_64-unknown-linux-musl
+          # 64-bit macOS
+          - x86_64-apple-darwin
+          # ARM64 macOS
+          - aarch64-apple-darwin
+          # 64-bit Windows
+          - x86_64-pc-windows-msvc
+        # This expands the matrix variables for the target
+        # https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs#expanding-or-adding-matrix-configurations
+        include:
+          - target: x86_64-unknown-linux-gnu
+            # I force an old version of Ubuntu to ensure compatibility with older systems
+            # otherwise the executables might error due to an incompatible glibc version
+            os: ubuntu-20.04
+          - target: x86_64-unknown-linux-musl
+            os: ubuntu-latest
+          - target: x86_64-apple-darwin
+            os: macOS-latest
+          - target: aarch64-apple-darwin
+            os: macOS-latest
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Extract Tag (optional)
+        if: ${{ inputs.version == '' }}
+        id: tag-git
+        shell: bash
+        run: |
+          echo "NAME=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+      - name: Set Tag
+        id: tag
+        shell: bash
+        run: |
+          export INPUT_VERSION="${{ inputs.version }}"
+          if [ -z "$INPUT_VERSION" ]; then
+            export NAME="${{ steps.tag-git.outputs.name }}"
+          else
+            export NAME="$INPUT_VERSION"
+          fi
+          echo "NAME=$NAME" >> $GITHUB_OUTPUT
+      - name: Setup Cache for Rust
+        uses: Swatinem/rust-cache@v2
+        with:
+          prefix-key: "${{ matrix.target }}"
+      - name: Setup Rust for ${{ matrix.target }}
+        run: rustup target add ${{ matrix.target }}
+      - name: Install dependencies for musl build
+        if: matrix.target == 'x86_64-unknown-linux-musl'
+        run: sudo apt install -y musl-tools
+      - name: Build Binary
+        run: cargo build --release --target ${{ matrix.target }} -p ${{ inputs.name }}
+      - name: Archive Binary
+        if: matrix.os != 'windows-latest'
+        working-directory: target/${{ matrix.target }}/release/
+        run: |
+          strip ${{ inputs.name }}
+          tar czvf ../../../${{ inputs.name }}-${{ steps.tag.outputs.name }}-${{ matrix.target }}.tar.gz ${{ inputs.name }}
+      - name: Archive Binary (windows)
+        if: matrix.os == 'windows-latest'
+        working-directory: target/${{ matrix.target }}/release/
+        run: |
+          strip ${{ inputs.name }}.exe
+          7z a ../../../${{ inputs.name }}-${{ steps.tag.outputs.name }}-${{ matrix.target }}.zip ${{ inputs.name }}.exe
+      - name: Upload Archive as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          if-no-files-found: error
+          name: ${{ inputs.name }}-${{ steps.tag.outputs.name }}-${{ matrix.target }}
+          path: ${{ inputs.name }}-${{ steps.tag.outputs.name }}-${{ matrix.target }}.*
