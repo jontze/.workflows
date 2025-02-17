@@ -10,6 +10,11 @@ on:
         required: false
         type: string
         description: "The version of the crate. If not provided, the version is extracted from the tag"
+      retention_days:
+        required: false
+        type: number
+        description: "The number of days to retain the artifact"
+        default: 0 # 0 Means the default retention policy is used
 
 jobs:
   build-binaries:
@@ -90,6 +95,7 @@ jobs:
       - name: Upload Archive as Artifact
         uses: actions/upload-artifact@v4
         with:
+          retention-days: ${{ inputs.retention_days }}
           if-no-files-found: error
           name: ${{ inputs.name }}-${{ steps.tag.outputs.name }}-${{ matrix.target }}
           path: ${{ inputs.name }}-${{ steps.tag.outputs.name }}-${{ matrix.target }}.*
