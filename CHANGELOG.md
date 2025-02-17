@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - *(rust_release)* Use latest version of conventional versioning
 - *(changelog)* Add workflow to generate changelog file
 - *(changelog_gen)* Allow to specify branch for changelog_gen
+- *(workflow)* Create generic single-platform image built
 
 ### 🐛 Bug Fixes
 
@@ -47,6 +48,7 @@ All notable changes to this project will be documented in this file.
 - *(rust_release)* Remove explicit tag fetching and just use depth
 - *(rust_release)* Remove debug echo step
 - Init git-cliff for changelog generation
+- Update changelog [skip ci]
 - Update changelog [skip ci]
 - Update changelog [skip ci]
 - Update changelog [skip ci]
