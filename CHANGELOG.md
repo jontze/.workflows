@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - *(changelog_gen)* Allow to specify branch for changelog_gen
 - *(workflow)* Create generic single-platform image built
 - *(workflows)* Build generic rust executables for multiple platforms
+- *(workflows/binaries)* Allow to modify rentention days
 
 ### 🐛 Bug Fixes
 
@@ -42,6 +43,7 @@ All notable changes to this project will be documented in this file.
 - *(changelog)* Remove secret decleration that has conlficting name
 - *(changelog)* Remove pull before creating and pushing commit
 - *(changelog)* Make inputs with defaults optional
+- *(workflows/binaries)* Upgrade to ubuntu 22 due to gh managed brownout
 
 ### 🚜 Refactor
 
@@ -53,6 +55,7 @@ All notable changes to this project will be documented in this file.
 - *(rust_release)* Remove explicit tag fetching and just use depth
 - *(rust_release)* Remove debug echo step
 - Init git-cliff for changelog generation
+- Update changelog [skip ci]
 - Update changelog [skip ci]
 - Update changelog [skip ci]
 - Update changelog [skip ci]
