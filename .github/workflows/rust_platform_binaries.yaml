@@ -12,8 +12,8 @@ on:
         description: "The version of the crate. If not provided, the version is extracted from the tag"
 
 jobs:
-  build-cli:
-    name: Build CLI Binary for ${{ matrix.target }}
+  build-binaries:
+    name: Build Binary for ${{ matrix.target }}
     strategy:
       fail-fast: false
       matrix:
