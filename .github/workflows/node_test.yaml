@@ -1,0 +1,94 @@
+---
+name: Node.JS Test
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        description: Working directory
+        default: .
+        required: false
+        type: string
+      node-version:
+        description: Node.js version to use
+        required: false
+        type: string
+      build:
+        description: Test with build
+        default: false
+        required: false
+        type: boolean
+      unit-tests:
+        description: Run with unit tests
+        default: false
+        required: false
+        type: boolean
+      format:
+        description: Run code formatting checks
+        default: false
+        required: false
+        type: boolean
+      lint:
+        description: Run linting checks
+        default: false
+        required: false
+        type: boolean
+      build-cmd:
+        description: Command to build the project
+        default: npm run build
+        required: false
+        type: string
+      unit-test-cmd:
+        description: Command to run unit tests
+        default: npm test
+        required: false
+        type: string
+      format-cmd:
+        description: Command to run code formatting checks
+        default: npm run format
+        required: false
+        type: string
+      lint-cmd:
+        description: Command to run linting checks
+        default: npm run lint
+        required: false
+        type: string
+
+jobs:
+  lint:
+    name: Lint
+    if: inputs.lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js from ${{ inputs.working-directory }}/.nvmrc
+        if: ${{ !inputs.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ${{ inputs.working-directory }}/.nvmrc
+          cache: npm
+      - name: Setup Node.js
+        if: ${{ inputs.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: npm
+      - name: Install Dependencies
+        run: npm ci
+        working-directory: ${{ inputs.working-directory }}
+      - name: Run Lint
+        if: inputs.lint
+        run: ${{ inputs.lint-cmd }}
+        working-directory: ${{ inputs.working-directory }}
+      - name: Run Format Check
+        if: inputs.format
+        run: ${{ inputs.format-cmd }}
+        working-directory: ${{ inputs.working-directory }}
+      - name: Run Unit Tests
+        if: inputs.unit-tests
+        run: ${{ inputs.unit-test-cmd }}
+        working-directory: ${{ inputs.working-directory }}
+      - name: Run Build
+        if: inputs.build
+        run: ${{ inputs.build-cmd }}
+        working-directory: ${{ inputs.working-directory }}
