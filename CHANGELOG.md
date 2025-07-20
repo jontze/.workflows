@@ -24,6 +24,8 @@ All notable changes to this project will be documented in this file.
 - *(workflow)* Create generic single-platform image built
 - *(workflows)* Build generic rust executables for multiple platforms
 - *(workflows/binaries)* Allow to modify rentention days
+- *(node)* Add test workflow for node.js based apps
+- *(node)* Split test workflow into multiple jobs
 
 ### 🐛 Bug Fixes
 
@@ -55,6 +57,7 @@ All notable changes to this project will be documented in this file.
 - *(rust_release)* Remove explicit tag fetching and just use depth
 - *(rust_release)* Remove debug echo step
 - Init git-cliff for changelog generation
+- Update changelog [skip ci]
 - Update changelog [skip ci]
 - Update changelog [skip ci]
 - Update changelog [skip ci]
