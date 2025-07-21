@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - *(workflows/binaries)* Allow to modify rentention days
 - *(node)* Add test workflow for node.js based apps
 - *(node)* Split test workflow into multiple jobs
+- *(helm)* Add oci image publish workflow using flux
 
 ### 🐛 Bug Fixes
 
@@ -46,6 +47,8 @@ All notable changes to this project will be documented in this file.
 - *(changelog)* Remove pull before creating and pushing commit
 - *(changelog)* Make inputs with defaults optional
 - *(workflows/binaries)* Upgrade to ubuntu 22 due to gh managed brownout
+- *(helm)* Don't use reserved variable name for registry secret
+- *(helm)* Always push and remove conditional push input
 
 ### 🚜 Refactor
 
@@ -57,6 +60,7 @@ All notable changes to this project will be documented in this file.
 - *(rust_release)* Remove explicit tag fetching and just use depth
 - *(rust_release)* Remove debug echo step
 - Init git-cliff for changelog generation
+- Update changelog [skip ci]
 - Update changelog [skip ci]
 - Update changelog [skip ci]
 - Update changelog [skip ci]
