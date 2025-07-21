@@ -1,0 +1,70 @@
+---
+name: Publish OCI Chart
+on:
+  workflow_call:
+    inputs:
+      chart_name:
+        required: true
+        type: string
+        description: "The name of the chart to publish"
+      user:
+        required: false
+        type: string
+        description: "The user to publish the chart as"
+        default: ${{ github.repository_owner }}
+      scope:
+        required: false
+        type: string
+        description: "The scope of the chart to publish (e.g. organization name)"
+        default: ${{ github.repository_owner }}
+      registry:
+        required: false
+        type: string
+        default: "ghcr.io"
+        description: "The registry to publish the chart to"
+      path:
+        required: true
+        type: string
+        description: "The path to the chart to publish"
+      push:
+        required: false
+        type: boolean
+        default: true
+        description: "Whether to push the chart to the registry"
+    secrets:
+      GITHUB_TOKEN:
+        required: true
+        description: "GitHub token with permissions to publish packages"
+
+jobs:
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      OCI_MANIFESTS_BASE_URL: "oci://${{ inputs.registry }}/${{ inputs.scope }}/charts"
+      OCI_MANIFESTS_REPO: "oci://${{ inputs.registry }}/${{ inputs.scope }}/charts/${{ inputs.chart_name }}"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Helm Login
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ${{ inputs.registry }} --username ${{ inputs.user }} --password-stdin
+      - name: Login to ${{ inputs.registry }}
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ inputs.registry }}
+          username: ${{ inputs.user }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup flux cli
+        uses: fluxcd/flux2/action@main
+      - name: Push Helm Manifests to OCI Image
+        run: |
+          export CHART_VERSION=$(helm show chart ${{ inputs.path }} | yq e '.version' -)
+          helm package ${{ inputs.path }}
+          helm push ${{ inputs.chart_name }}-$CHART_VERSION.tgz $OCI_MANIFESTS_BASE_URL
+          flux tag artifact $OCI_MANIFESTS_REPO:$CHART_VERSION \
+            --tag latest \
+            --tag $(git rev-parse --short HEAD)
