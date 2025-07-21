@@ -26,11 +26,6 @@ on:
         required: true
         type: string
         description: "The path to the chart to publish"
-      push:
-        required: false
-        type: boolean
-        default: true
-        description: "Whether to push the chart to the registry"
     secrets:
       REGISTRY_TOKEN:
         required: true
