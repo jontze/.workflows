@@ -43,7 +43,7 @@ jobs:
       OCI_MANIFESTS_REPO: "oci://${{ inputs.registry }}/${{ inputs.scope }}/charts/${{ inputs.chart_name }}"
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Helm Login
         run: |
           echo "${{ secrets.REGISTRY_TOKEN }}" | helm registry login ${{ inputs.registry }} --username ${{ inputs.user }} --password-stdin
