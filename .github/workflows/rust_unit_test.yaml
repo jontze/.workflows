@@ -8,6 +8,11 @@ on:
         default: stable
         required: false
         type: string
+      workspace:
+        description: Run all tests in the workspace
+        default: false
+        required: false
+        type: boolean
       working-directory:
         description: Working directory
         default: .
@@ -38,5 +43,9 @@ jobs:
         with:
           toolchain: ${{ inputs.toolchain }}
       - name: Test
+        if: ${{ !inputs.workspace }}
         working-directory: ${{ inputs.working-directory }}
         run: cargo test
+      - name: Test (Workspace)
+        if: ${{ inputs.workspace }}
+        run: cargo test --workspace

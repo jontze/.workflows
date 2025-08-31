@@ -13,6 +13,11 @@ on:
         type: boolean
         required: false
         description: Run with unit tests
+      unit-test-workspace:
+        description: Run all tests in the workspace
+        default: false
+        required: false
+        type: boolean
       working-directory:
         description: Working directory
         default: .
@@ -55,3 +60,4 @@ jobs:
     with:
       toolchain: ${{ inputs.toolchain }}
       working-directory: ${{ inputs.working-directory }}
+      workspace: ${{ inputs.unit-test-workspace }}
