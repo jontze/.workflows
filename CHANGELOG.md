@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - *(node)* Add test workflow for node.js based apps
 - *(node)* Split test workflow into multiple jobs
 - *(helm)* Add oci image publish workflow using flux
+- *(rust)* Allow to execute cargo unit tests on all workspace items
 
 ### 🐛 Bug Fixes
 
@@ -60,6 +61,7 @@ All notable changes to this project will be documented in this file.
 - *(rust_release)* Remove explicit tag fetching and just use depth
 - *(rust_release)* Remove debug echo step
 - Init git-cliff for changelog generation
+- Update changelog [skip ci]
 - Update changelog [skip ci]
 - Update changelog [skip ci]
 - Update changelog [skip ci]
