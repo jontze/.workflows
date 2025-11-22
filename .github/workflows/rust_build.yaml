@@ -32,7 +32,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Setup Cache for Rust
         uses: Swatinem/rust-cache@v2
         with:
