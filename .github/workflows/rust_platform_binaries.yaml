@@ -93,7 +93,7 @@ jobs:
           strip ${{ inputs.name }}.exe
           7z a ../../../${{ inputs.name }}-${{ steps.tag.outputs.name }}-${{ matrix.target }}.zip ${{ inputs.name }}.exe
       - name: Upload Archive as Artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           retention-days: ${{ inputs.retention_days }}
           if-no-files-found: error
