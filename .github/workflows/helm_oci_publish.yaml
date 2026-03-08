@@ -48,7 +48,7 @@ jobs:
         run: |
           echo "${{ secrets.REGISTRY_TOKEN }}" | helm registry login ${{ inputs.registry }} --username ${{ inputs.user }} --password-stdin
       - name: Login to ${{ inputs.registry }}
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ inputs.registry }}
           username: ${{ inputs.user }}
